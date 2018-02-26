@@ -1,0 +1,26 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+
+certifi = "==2018.1.18"
+chardet = "==3.0.4"
+django = "==2.0.2"
+django-filter = "==1.1.0"
+django-oauth-toolkit = "==1.0.0"
+djangorestframework = "==3.7.7"
+idna = "==2.6"
+markdown = "==2.6.11"
+"oauth2-provider" = "==0.0"
+oauthlib = "==2.0.6"
+pytz = "==2018.3"
+requests = "==2.18.4"
+"urllib3" = "==1.22"
+
+
+[dev-packages]
+

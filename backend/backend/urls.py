@@ -14,8 +14,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.views.generic.base import RedirectView
+
+from rest_framework import routers
+
+from operations import views
+
+router = routers.DefaultRouter()
+
+
+router.register('product', views.ProductViewSet, base_name='product')
+router.register('purchase', views.PurchaseViewSet, base_name='purchase')
+router.register('user', views.BBSUserViewSet, base_name='user')
+
+router.register('allpurchases', views.AllPurchaseViewSet, base_name='allpurchases')
 
 urlpatterns = [
+#    path('', RedirectView.as_view(url='/api'), name='redirect'),
     path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls')),
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 ]

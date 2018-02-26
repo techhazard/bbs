@@ -12,20 +12,38 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_PRODUCTION_SECRET_FILE = os.path.join(BASE_DIR, 'production_secret')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'jyj8-(6fl06*q8l^7xwydo21e6h%&d+$$akz4eawz_$kr*u8e8'
+if DEBUG:
+    SECRET_KEY = 'jyj8-(6fl06*q8l^7xwydo21e6h%&d+$$akz4eawz_$kr*u8e8'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+else:
+    try:
+        # the file is not a secret, but contains a "secret"
+        with open(_PRODUCTION_SECRET_FILE) as production_secret:
+            SECRET_KEY = production_secret.read().splitlines()[0]
+    except FileNotFoundError:
+        import random
+        from string import ascii_letters, digits, punctuation
 
-ALLOWED_HOSTS = []
+        SECRET_KEY = ''.join([random.SystemRandom().choice(ascii_letters + digits + punctuation)
+                              for _ in range(0, 50)])
+
+        with open(_PRODUCTION_SECRET_FILE, 'x') as production_secret:
+            production_secret.write(SECRET_KEY)
+
+
+ALLOWED_HOSTS = ["*"]
 
 AUTH_USER_MODEL = 'operations.BBSUser'
 
@@ -38,6 +56,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+    'oauth2_provider',
 
     'operations',
 ]
@@ -57,7 +78,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['operations'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,6 +104,7 @@ DATABASES = {
     }
 }
 
+LOGIN_REDIRECT_URL = '/'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -116,8 +138,17 @@ USE_L10N = True
 
 USE_TZ = True
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    )
+}
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
-
 STATIC_URL = '/static/'

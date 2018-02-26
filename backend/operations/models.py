@@ -9,9 +9,10 @@ class BBSUser(AbstractUser):
     email = models.CharField(max_length=256)
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated = models.DateTimeField(auto_now=True)
+    is_staff = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.uuid)[:8]
+        return str(self.username)[:8]
 
 
 class CommonModel(models.Model):
@@ -37,11 +38,9 @@ class Product(CommonModel):
         return str(self.name)
 
 class Purchase(CommonModel):
-    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING) 
-    total_price = models.IntegerField()
-
-class Product_Purchase(CommonModel):
-    purchase_id = models.ForeignKey(Purchase, related_name='purchase', on_delete=models.DO_NOTHING)
     product_id = models.ForeignKey(Product, related_name='product', on_delete=models.DO_NOTHING)
     product_price = models.IntegerField()
     product_amount = models.IntegerField()
+    
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING) 
+    purchase_id = models.UUIDField(primary_key=False, default=uuid.uuid4, editable=False)

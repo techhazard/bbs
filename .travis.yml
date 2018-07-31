@@ -14,7 +14,7 @@ before_script:
   - git clone https://github.com/flutter/flutter.git -b beta --depth 1
   - ./flutter/bin/flutter doctor
 script:
-  - sh -c 'cd flutter_frontend && ../flutter/bin/flutter test'
+  - sh -c 'cd flutter_travis_sample && ../flutter/bin/flutter test'
 cache:
   directories:
     - $HOME/.pub-cache

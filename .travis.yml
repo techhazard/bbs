@@ -13,15 +13,15 @@ addons:
       - fonts-droid
 
 before_script:
-  - git clone https://github.com/flutter/flutter.git -b beta --depth 1 || cd flutter && git pull -r
+  - git clone https://github.com/flutter/flutter.git -b beta --depth 1 || cd flutter && git pull -r; cd -
   - ls -la
-  - ./flutter/bin/flutter doctor
+  - cd flutter_travis_sample && ./flutter/bin/flutter doctor; cd -
 
 script:
-  - cd flutter_travis_sample && ../flutter/bin/flutter test
+  - cd flutter_travis_sample && ../flutter/bin/flutter test; cd -
   - ls -la
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd flutter_travis_sample && ../flutter/bin/flutter build apk; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd flutter_travis_sample && ../flutter/bin/flutter build ios; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd flutter_travis_sample && ../flutter/bin/flutter build apk; cd -; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd flutter_travis_sample && ../flutter/bin/flutter build ios; cd -; fi
 
 cache:
   directories:

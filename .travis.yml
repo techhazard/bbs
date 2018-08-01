@@ -14,7 +14,7 @@ matrix:
         - cd flutter_travis_sample && ./flutter/bin/flutter doctor; cd -
         - pip install six
       script:
-        - cd flutter_travis_sample && ../flutter/bin/flutter build ios --no-codesign && cd -
+        - cd flutter_travis_sample && ../flutter/bin/flutter build ios --no-codesign --simulator && cd -
       cache:
         directories:
           - $HOME/.pub-cache

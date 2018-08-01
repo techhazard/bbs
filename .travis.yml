@@ -2,6 +2,7 @@ os:
   - linux
   - osx
 sudo: false
+
 addons:
   apt:
     # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
@@ -10,12 +11,18 @@ addons:
     packages:
       - libstdc++6
       - fonts-droid
+
 before_script:
-  - git clone https://github.com/flutter/flutter.git -b beta --depth 1
+  - git clone https://github.com/flutter/flutter.git -b beta --depth 1 || cd flutter && git pull -r
   - ./flutter/bin/flutter doctor
+
 script:
-  - sh -c 'cd flutter_travis_sample && ../flutter/bin/flutter test'
+  - cd flutter_travis_sample && ../flutter/bin/flutter test
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd flutter_travis_sample && ../flutter/bin/flutter build apk; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd flutter_travis_sample && ../flutter/bin/flutter build ios; fi
+
 cache:
   directories:
     - $HOME/.pub-cache
+    - flutter
 

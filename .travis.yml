@@ -5,11 +5,20 @@ matrix:
       python: 3.6
       before_install: pip3 install pipenv
       install: cd backend && pipenv install; cd -
-      script: cd backend && pipenv run ./manage.py test
+      script: cd backend && pipenv run ./manage.py test; cd -
 
     - os: osx
       osx_image: xcode9.4
+      before_script:
+        - git clone https://github.com/flutter/flutter.git -b beta --depth 1 || cd flutter && git pull; cd -
+        - cd flutter_travis_sample && ./flutter/bin/flutter doctor; cd -
+      script:
+        - cd flutter_travis_sample && ../flutter/bin/flutter build ios; cd -
+      cache:
+        directories:
+          - $HOME/.pub-cache
 
+    - os: linux
       language: android
       android:
         components:
@@ -28,16 +37,15 @@ matrix:
           # if you need to run emulator(s) during your tests
           - sys-img-armeabi-v7a-android-26
           - sys-img-armeabi-v7a-android-17
-
       before_script:
         - git clone https://github.com/flutter/flutter.git -b beta --depth 1 || cd flutter && git pull; cd -
         - cd flutter_travis_sample && ./flutter/bin/flutter doctor; cd -
       script:
-        - cd flutter_travis_sample && ../flutter/bin/flutter build ios; cd -
-        # - cd flutter_travis_sample && ../flutter/bin/flutter build apk; cd -
+        - cd flutter_travis_sample && ../flutter/bin/flutter build apk; cd -
       cache:
         directories:
           - $HOME/.pub-cache
+
 
 
       # os:

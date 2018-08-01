@@ -18,8 +18,7 @@ matrix:
         directories:
           - $HOME/.pub-cache
 
-    - os: linux
-      language: android
+    - language: android
       android:
         components:
           # Uncomment the lines below if you want to

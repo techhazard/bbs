@@ -14,6 +14,7 @@ addons:
 
 before_script:
   - git clone https://github.com/flutter/flutter.git -b beta --depth 1 || cd flutter && git pull -r
+  - ls -la
   - ./flutter/bin/flutter doctor
 
 script:

@@ -18,6 +18,7 @@ before_script:
 
 script:
   - cd flutter_travis_sample && ../flutter/bin/flutter test
+  - ls -la
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cd flutter_travis_sample && ../flutter/bin/flutter build apk; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd flutter_travis_sample && ../flutter/bin/flutter build ios; fi
 

@@ -41,6 +41,6 @@ class Purchase(CommonModel):
     product_id = models.ForeignKey(Product, related_name='product', on_delete=models.DO_NOTHING)
     product_price = models.IntegerField()
     product_amount = models.IntegerField()
-    
-    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING) 
+
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     purchase_id = models.UUIDField(primary_key=False, default=uuid.uuid4, editable=False)

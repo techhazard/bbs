@@ -11,7 +11,7 @@ class BBSUser(AbstractUser):
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated = models.DateTimeField(auto_now=True)
     is_staff = models.BooleanField(default=False)
-    default_account = models.ForeignKey('Account', null=True, on_delete=models.DO_NOTHING)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return str(self.username)[:8]
@@ -30,18 +30,11 @@ class CommonModel(models.Model):
         abstract = True
 
 
-class Account(CommonModel):
-    owned_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
-    balance = models.DecimalField(max_digits=10, decimal_places=2)
-    name = models.CharField(max_length=256)
-    description = models.CharField(max_length=256, null=True)
-
-
 class Product(CommonModel):
     active = models.BooleanField(default=True)
     name = models.CharField(max_length=256)
     stock = models.IntegerField(default=0)
-    price = models.IntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     comment = models.CharField(max_length=256)
 
     def __str__(self):
@@ -50,7 +43,8 @@ class Product(CommonModel):
 
 class Transaction(CommonModel):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
-    affected_account = models.ForeignKey(Account, on_delete=models.DO_NOTHING)
+    affected_account = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='account', on_delete=models.DO_NOTHING)
+
     account_balance_pre = models.DecimalField(max_digits=10, decimal_places=2)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     account_balance_post = models.DecimalField(max_digits=10, decimal_places=2)

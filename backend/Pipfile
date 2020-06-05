@@ -9,7 +9,7 @@ name = "pypi"
 
 certifi = "==2018.1.18"
 chardet = "==3.0.4"
-django = "==2.0.2"
+django = "==2.2.13"
 django-filter = "==1.1.0"
 django-oauth-toolkit = "==1.0.0"
 djangorestframework = "==3.7.7"
